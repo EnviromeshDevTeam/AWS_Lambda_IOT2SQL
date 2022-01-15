@@ -16,7 +16,7 @@ DB_PORT = os.getenv("DB_PORT")
 
 # From .env files grab our ENGINE_ENDPOINT or Connection string and pass it into the
 DB_ENGINE = create_engine(
-    f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_ENDPOINT}:{DB_PORT}/{DB_NAME}")
+    f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_ENDPOINT}/{DB_NAME}")
 
 
 def lambda_handler(event: str, context: str):
