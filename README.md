@@ -6,3 +6,5 @@
 <img src="./images/AWS_enviromesh-stack.png">
 
  TODO: Add .env.example and Mini Guide
+
+ Enviromesh Artwork/Logos designed by: Super snake - https://www.behance.net/Supersnaketate
