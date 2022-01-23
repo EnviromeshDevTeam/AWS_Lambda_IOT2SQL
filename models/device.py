@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, VARCHAR
+from sqlalchemy import Column, Integer, TIMESTAMP, VARCHAR
 from sqlalchemy.orm import declarative_base
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -20,5 +20,5 @@ class Device(Base):
     id=Column(Integer, primary_key=True)
     name=Column(VARCHAR)
     address=Column(VARCHAR)
-    created_at=Column(DateTime)
-    updated_at=Column(DateTime)
+    created_at=Column(TIMESTAMP)
+    updated_at=Column(TIMESTAMP)

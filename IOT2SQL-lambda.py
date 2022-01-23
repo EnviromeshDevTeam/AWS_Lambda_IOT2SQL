@@ -4,6 +4,7 @@ from dotenv import load_dotenv, find_dotenv
 from sqlalchemy.orm.session import Session
 from models.data import Data
 from models.device import Device
+from datetime import datetime
 import os
 
 # *1. find .env file > load .env
@@ -18,7 +19,6 @@ DB_PORT = os.getenv("DB_PORT")
 # From .env files grab our ENGINE_ENDPOINT or Connection string and pass it into the
 DB_ENGINE = create_engine(
     f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_ENDPOINT}/{DB_NAME}")
-#! NOTE: Port not needed since this is all contained in an AWS VPC
 
 
 def lambda_handler(event: str, context: str):
@@ -30,20 +30,21 @@ def lambda_handler(event: str, context: str):
     """
 
     # TODO Change Device in AWS IoT payload to a Device int and replace the 1 argument here
-    # * with paramater auto closes sqlalchemy session and commits if no exceptions, otherwise rollsback and closes connection
     with Session(DB_ENGINE) as db_session, db_session.begin():
         try:
             data2Insert = []
             for cat_Key, data_Value in event['data'].items():
-                data2Insert.append(
-                    Data(1, cat_Key, data_Value, event['timestamp']))
-            db_session.add_all(data2Insert)
+                db_session.add(
+                    Data(device_id=1, category_id=int(cat_Key), data=int(data_Value), created_at=event['timestamp'], updated_at=event['timestamp'])
+                )
             device_Update = db_session.query(Device).filter(Device.id == 1).first()
             device_Update.updated_at = event['timestamp']
+            db_session.commit()
             return {
                 'statusCode': 200,
                 'body': json.dumps('Inserted data successfully to Our DB Connection Endpoint')
             }
+            
         except Exception as e:
             print(e)
             print("Something went wrong with the lambda")
